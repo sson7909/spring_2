@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface BoardDAO {
 
-	public int insert() throws Exception;
+	public int insert(BoardDTO boardDTO) throws Exception;
 	
-	public int update() throws Exception;
+	public int update(BoardDTO boardDTO) throws Exception;
 	
-	public int delete() throws Exception;
+	public int delete(int num) throws Exception;
 	
 	public List<BoardDTO> selectList() throws Exception;
 	
-	public BoardDTO selectOne() throws Exception;
+	public BoardDTO selectOne(int num) throws Exception;
 	
-	public int hit() throws Exception;
+	public int hit(int num) throws Exception;
 }

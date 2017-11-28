@@ -9,7 +9,14 @@ public class BoardDTO {
 	private String title;
 	private String contents;
 	private Date reg_date;
+	private int hit;
 	
+	public int getHit() {
+		return hit;
+	}
+	public void setHit(int hit) {
+		this.hit = hit;
+	}
 	public int getNum() {
 		return num;
 	}
