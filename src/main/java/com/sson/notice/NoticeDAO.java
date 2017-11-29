@@ -6,12 +6,17 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.chainsaw.Main;
+
 import com.sson.board.BoardDAO;
 import com.sson.board.BoardDTO;
 import com.sson.util.DBConnector;
 
-public class NoticeDAO implements BoardDAO{
+import oracle.net.aso.b;
 
+public class NoticeDAO implements BoardDAO{
+	
+	
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
 		Connection con = DBConnector.getDBConnect();
@@ -35,6 +40,8 @@ public class NoticeDAO implements BoardDAO{
 		}else{
 			con.rollback();
 		}
+		
+		DBConnector.disConnect(con, st);
 		
 		return result;
 	}
@@ -64,6 +71,8 @@ public class NoticeDAO implements BoardDAO{
 			con.rollback();
 		}
 		
+		DBConnector.disConnect(con, st);
+		
 		return result;
 	}
 
@@ -88,6 +97,8 @@ public class NoticeDAO implements BoardDAO{
 			con.rollback();
 		}
 		
+		DBConnector.disConnect(con, st);
+		
 		return result;
 	}
 
@@ -103,19 +114,21 @@ public class NoticeDAO implements BoardDAO{
 		ResultSet rs = st.executeQuery();
 		
 		List<BoardDTO> ar = new ArrayList<BoardDTO>();
-		NoticeDTO noticeDTO = null;
+		BoardDTO boardDTO = null;
 		while(rs.next()){
-			noticeDTO = new NoticeDTO();
-			noticeDTO.setNum(rs.getInt("num"));
-			noticeDTO.setWriter(rs.getString("writer"));
-			noticeDTO.setTitle(rs.getString("title"));
-			noticeDTO.setContents(rs.getString("contents"));
-			noticeDTO.setReg_date(rs.getDate("reg_date"));
-			noticeDTO.setHit(rs.getInt("hit"));
+			boardDTO = new NoticeDTO();
+			boardDTO.setNum(rs.getInt("num"));
+			boardDTO.setWriter(rs.getString("writer"));
+			boardDTO.setTitle(rs.getString("title"));
+			boardDTO.setContents(rs.getString("contents"));
+			boardDTO.setReg_date(rs.getDate("reg_date"));
+			boardDTO.setHit(rs.getInt("hit"));
 			
-			ar.add(noticeDTO);
+			ar.add(boardDTO);
 			
 		}
+		
+		DBConnector.disConnect(con, st, rs);
 		
 		return ar;
 	}
@@ -145,6 +158,7 @@ public class NoticeDAO implements BoardDAO{
 			noticeDTO.setHit(rs.getInt("hit"));
 		}
 		
+		DBConnector.disConnect(con, st, rs);
 		
 		return noticeDTO;
 	}
@@ -163,7 +177,22 @@ public class NoticeDAO implements BoardDAO{
 		
 		return result;
 	}
-
 	
-	
+	@Override
+	public int getTotalCount() throws Exception {
+		Connection con = DBConnector.getDBConnect();
+		
+		String sql = "select nvl(count(num),0) from NOTICE ";
+		
+		PreparedStatement st = con.prepareStatement(sql	);
+		
+		ResultSet rs = st.executeQuery();
+		
+		rs.next();
+		int result = rs.getInt(1);
+		
+		DBConnector.disConnect(con, st, rs);
+		
+		return result;
+	}
 }

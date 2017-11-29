@@ -1,4 +1,4 @@
-package com.sson.g1;
+package com.sson.s2;
 
 import java.text.DateFormat;
 import java.util.Date;

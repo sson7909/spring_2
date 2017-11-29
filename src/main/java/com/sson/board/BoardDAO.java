@@ -15,4 +15,6 @@ public interface BoardDAO {
 	public BoardDTO selectOne(int num) throws Exception;
 	
 	public int hit(int num) throws Exception;
+	
+	public int getTotalCount () throws Exception;
 }

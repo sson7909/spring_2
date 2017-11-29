@@ -11,7 +11,7 @@ public  class DBConnector {
 		
 		String user = "user02";
 		String password = "user02";
-		String url = "ojdbc:oracle:thin:@192.168.20.11:1521:xe";
+		String url = "jdbc:oracle:thin:@192.168.20.11:1521:xe";
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		
 		Class.forName(driver);
