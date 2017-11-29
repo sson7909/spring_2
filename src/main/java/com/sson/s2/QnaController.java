@@ -9,31 +9,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sson.board.BoardDTO;
-import com.sson.notice.NoticeService;
+import com.sson.qna.QnaService;
 
 @Controller
-@RequestMapping(value="/notice/*")
-public class NoticeController {
-	
-	@Inject
-	private NoticeService noticeService;
+@RequestMapping(value="/qna/*")
+public class QnaController {
 
-	@RequestMapping(value="noticeList")
-	public String selectList(Model model){
+	@Inject
+	private QnaService qnaService;
+	
+	@RequestMapping(value="qnaList")
+	public String selectList(Model model) {
 		
 		List<BoardDTO> ar = null;
+		
 		try {
-			ar = noticeService.selectList();
-			
+			ar = qnaService.selectList();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("dto", ar)
-		.addAttribute("board", "notice");
+		model.addAttribute("dto", ar);
+		model.addAttribute("board" , "qna");
 		
 		return "board/boardList";
 	}
-	
+
 }

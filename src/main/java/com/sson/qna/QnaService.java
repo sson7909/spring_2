@@ -1,18 +1,18 @@
-package com.sson.notice;
+package com.sson.qna;
 
 import java.util.List;
 
 import com.sson.board.BoardDTO;
 import com.sson.board.BoardService;
 
-public class NoticeService implements BoardService {
-
-	private NoticeDAO noticeDAO;
+public class QnaService implements BoardService{
 	
-	public void setNoticeDAO(NoticeDAO noticeDAO) {
-		this.noticeDAO = noticeDAO;
+	
+	private QnaDAO qnaDAO;
+	
+	public void setQnaDAO(QnaDAO qnaDAO) {
+		this.qnaDAO = qnaDAO;
 	}
-
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
@@ -40,8 +40,9 @@ public class NoticeService implements BoardService {
 
 	@Override
 	public List<BoardDTO> selectList() throws Exception {
-			
-		return noticeDAO.selectList();
+		
+		return qnaDAO.selectList();
 	}
 
+	
 }
