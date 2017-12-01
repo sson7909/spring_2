@@ -11,6 +11,7 @@ import org.apache.log4j.chainsaw.Main;
 import com.sson.board.BoardDAO;
 import com.sson.board.BoardDTO;
 import com.sson.util.DBConnector;
+import com.sson.util.RowNum;
 
 import oracle.net.aso.b;
 
@@ -103,13 +104,17 @@ public class NoticeDAO implements BoardDAO{
 	}
 
 	@Override
-	public List<BoardDTO> selectList() throws Exception {
+	public List<BoardDTO> selectList(RowNum rowNum) throws Exception {
 		Connection con = DBConnector.getDBConnect();
 		
 		String sql = "select * from (select rowNum R,S.* from "
-				+ "(select * from NOTICE order by num desc) S) where R BETWEEN 1 and 10";
+				+ "(select * from NOTICE where "+rowNum.getKind()+" like ? order by num desc) S) where R BETWEEN ? and ?";
 		
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+rowNum.getSearch()+"%");
+		st.setInt(2, rowNum.getStartRow());
+		st.setInt(3, rowNum.getLastRow());
+		
 		
 		ResultSet rs = st.executeQuery();
 		
@@ -179,12 +184,14 @@ public class NoticeDAO implements BoardDAO{
 	}
 	
 	@Override
-	public int getTotalCount() throws Exception {
+	public int getTotalCount(RowNum rowNum) throws Exception {
 		Connection con = DBConnector.getDBConnect();
 		
-		String sql = "select nvl(count(num),0) from NOTICE ";
+		String sql = "select nvl(count(num),0) from NOTICE where "+rowNum.getKind()+" like ? ";
 		
 		PreparedStatement st = con.prepareStatement(sql	);
+		
+		st.setString(1, "%"+rowNum.getSearch()+"%");
 		
 		ResultSet rs = st.executeQuery();
 		

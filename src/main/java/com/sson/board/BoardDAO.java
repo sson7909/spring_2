@@ -2,6 +2,8 @@ package com.sson.board;
 
 import java.util.List;
 
+import com.sson.util.RowNum;
+
 public interface BoardDAO {
 
 	public int insert(BoardDTO boardDTO) throws Exception;
@@ -10,11 +12,11 @@ public interface BoardDAO {
 	
 	public int delete(int num) throws Exception;
 	
-	public List<BoardDTO> selectList() throws Exception;
+	public List<BoardDTO> selectList(RowNum rowNum) throws Exception;
 	
 	public BoardDTO selectOne(int num) throws Exception;
 	
 	public int hit(int num) throws Exception;
 	
-	public int getTotalCount () throws Exception;
+	public int getTotalCount (RowNum rowNum) throws Exception;
 }

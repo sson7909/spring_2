@@ -2,8 +2,15 @@ package com.sson.qna;
 
 import java.util.List;
 
+import org.springframework.ui.Model;
+
 import com.sson.board.BoardDTO;
 import com.sson.board.BoardService;
+import com.sson.util.ListData;
+import com.sson.util.Pager;
+import com.sson.util.RowNum;
+
+import oracle.net.aso.p;
 
 public class QnaService implements BoardService{
 	
@@ -16,8 +23,8 @@ public class QnaService implements BoardService{
 
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return qnaDAO.insert(boardDTO);
 	}
 
 	@Override
@@ -33,15 +40,24 @@ public class QnaService implements BoardService{
 	}
 
 	@Override
-	public BoardDTO selectOne() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public BoardDTO selectOne(int num) throws Exception {
+	
+		qnaDAO.hit(num);
+		
+		return qnaDAO.selectOne(num);
 	}
 
 	@Override
-	public List<BoardDTO> selectList() throws Exception {
+	public List<BoardDTO> selectList(ListData listData,Model model) throws Exception {
+		RowNum rowNum = listData.makeRow();
+		int totalCount = qnaDAO.getTotalCount(rowNum);
+		Pager pager = listData.makePage(totalCount);
 		
-		return qnaDAO.selectList();
+		model.addAttribute("pager", pager);
+		model.addAttribute("list", qnaDAO.selectList(rowNum));
+		
+		
+		return qnaDAO.selectList(rowNum);
 	}
 
 	

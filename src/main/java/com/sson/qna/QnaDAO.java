@@ -10,6 +10,7 @@ import com.sson.board.BoardDAO;
 import com.sson.board.BoardDTO;
 import com.sson.qna.QnaDTO;
 import com.sson.util.DBConnector;
+import com.sson.util.RowNum;
 
 import oracle.net.aso.q;
 
@@ -21,7 +22,7 @@ public class QnaDAO implements BoardDAO{
 		
 		con.setAutoCommit(false);
 		
-		String sql="insert into QNA values(board_seq.nextval,?,?,?,sysdate,0)";
+		String sql="insert into QNA values(board_seq.nextval,?,?,?,sysdate,0,board_seq.nextval,0,0)";
 		
 		PreparedStatement st = con.prepareStatement(sql);
 		
@@ -100,13 +101,17 @@ public class QnaDAO implements BoardDAO{
 	}
 
 	@Override
-	public List<BoardDTO> selectList() throws Exception {
+	public List<BoardDTO> selectList(RowNum rowNum) throws Exception {
 		Connection con = DBConnector.getDBConnect();
 		
 		String sql = "select * from (select rowNum R,S.* from "
-				+ "(select * from QNA order by ref desc, step asc) S) where R BETWEEN 1 and 10";
+				+ "(select * from QNA where "+rowNum.getKind()+" like ? order by ref desc, step asc) S) where R BETWEEN ? and ?";
 		
 		PreparedStatement st = con.prepareStatement(sql);
+		st.setString(1, "%"+rowNum.getSearch()+"%");
+		st.setInt(2, rowNum.getStartRow());
+		st.setInt(3, rowNum.getLastRow());
+		
 		
 		ResultSet rs = st.executeQuery();
 		
@@ -182,12 +187,13 @@ public class QnaDAO implements BoardDAO{
 	}
 	
 	@Override
-	public int getTotalCount() throws Exception {
+	public int getTotalCount(RowNum rowNum) throws Exception {
 		Connection con = DBConnector.getDBConnect();
 		
-		String sql = "select nvl(count(num),0) from QNA ";
+		String sql = "select nvl(count(num),0) from QNA where "+rowNum.getKind()+ " like ?";
 		
 		PreparedStatement st = con.prepareStatement(sql	);
+		st.setString(1, "%"+rowNum.getSearch()+"%");
 		
 		ResultSet rs = st.executeQuery();
 		
@@ -199,5 +205,10 @@ public class QnaDAO implements BoardDAO{
 		return result;
 	}
 	
+	
+	public int replyInsert(BoardDTO boardDTO){
+		int result = 0;
+		return result;
+	}
 	
 }
