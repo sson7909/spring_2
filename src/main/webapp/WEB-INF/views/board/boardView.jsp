@@ -13,8 +13,18 @@
 	<h2>글 : ${one.contents }</h2>
 	<h2>날짜 : ${one.reg_date }</h2>
 	
+	<div>
+		<c:forEach items="${one.ar}" var="file">
+			<a href="../resources/upload/${file.filename }">${file.oriname }</a>
+		</c:forEach>
+	</div>
+	
 	<c:if test="${board eq 'qna'}">
 		<a href="${board }Reply">reply</a>
 	</c:if>
+	
+	<a href="./${board }Update?num=${one.num }">Update</a>
+	<a href="./${board }Delete?num=${one.num }">Delete</a>
+	
 </body>
 </html>

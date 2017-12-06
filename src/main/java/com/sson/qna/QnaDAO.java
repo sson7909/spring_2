@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.sson.board.BoardDAO;
 import com.sson.board.BoardDTO;
 import com.sson.qna.QnaDTO;
@@ -14,21 +16,41 @@ import com.sson.util.RowNum;
 
 import oracle.net.aso.q;
 
+@Repository
 public class QnaDAO implements BoardDAO{
 
+	public int getNum() throws Exception {
+		Connection con = DBConnector.getDBConnect();
+		
+		String sql ="select board_seq.nextval from dual"; //시퀀스의 다음 번호 가져오기
+		
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		ResultSet rs = st.executeQuery();
+		
+		rs.next();
+		int result = rs.getInt(1);
+		
+		DBConnector.disConnect(con, st, rs);
+		
+		return result;
+	}
+	
 	@Override
 	public int insert(BoardDTO boardDTO) throws Exception {
 		Connection con = DBConnector.getDBConnect();
 		
 		con.setAutoCommit(false);
 		
-		String sql="insert into QNA values(board_seq.nextval,?,?,?,sysdate,0,board_seq.nextval,0,0)";
+		String sql="insert into QNA values(?,?,?,?,sysdate,0,?,0,0)";
 		
 		PreparedStatement st = con.prepareStatement(sql);
 		
-		st.setString(1, boardDTO.getWriter());
-		st.setString(2, boardDTO.getTitle());
-		st.setString(3, boardDTO.getContents());
+		st.setInt(1, boardDTO.getNum());
+		st.setString(2, boardDTO.getWriter());
+		st.setString(3, boardDTO.getTitle());
+		st.setString(4, boardDTO.getContents());
+		st.setInt(5, boardDTO.getNum());
 		
 		
 		int result = st.executeUpdate();
@@ -58,7 +80,7 @@ public class QnaDAO implements BoardDAO{
 		st.setString(1, boardDTO.getWriter());
 		st.setString(2, boardDTO.getTitle());
 		st.setString(3, boardDTO.getContents());
-		st.setInt(5, boardDTO.getNum());
+		st.setInt(4, boardDTO.getNum());
 		
 		int result = st.executeUpdate();
 		

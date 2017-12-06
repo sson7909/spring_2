@@ -19,9 +19,12 @@
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="1"/>  <!-- ViewResolver 순서값 value -->
 	</beans:bean>
 	
 	
-	<context:component-scan base-package="com.sson.s2" />
+	<context:component-scan base-package="com.sson.s2" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
 	
 </beans:beans>

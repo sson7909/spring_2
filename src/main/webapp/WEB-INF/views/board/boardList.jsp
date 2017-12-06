@@ -22,7 +22,7 @@
 	$(function() {
 		var message = '${message}';
 		
-		if(message != ' '){
+		if(message != ''){
 			alert(message);
 		}
 		

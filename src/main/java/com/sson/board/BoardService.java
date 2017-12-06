@@ -2,6 +2,8 @@ package com.sson.board;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.ui.Model;
 
 import com.sson.util.ListData;
@@ -9,13 +11,13 @@ import com.sson.util.ListData;
 public interface BoardService {
 
 	//insert
-	public int insert(BoardDTO boardDTO) throws Exception ;
+	public int insert(BoardDTO boardDTO,HttpSession session) throws Exception ;
 	
 	//update
-	public int update(BoardDTO boardDTO) throws Exception;
+	public int update(BoardDTO boardDTO,HttpSession session) throws Exception;
 	
 	//delete
-	public int delete(int num) throws Exception;
+	public int delete(int num, HttpSession session) throws Exception;
 		
 	//selecOne 
 	public BoardDTO selectOne(int num) throws Exception;

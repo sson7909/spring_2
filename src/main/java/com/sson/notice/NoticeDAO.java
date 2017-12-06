@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.chainsaw.Main;
+import org.springframework.stereotype.Repository;
 
 import com.sson.board.BoardDAO;
 import com.sson.board.BoardDTO;
@@ -15,7 +16,24 @@ import com.sson.util.RowNum;
 
 import oracle.net.aso.b;
 
+@Repository
 public class NoticeDAO implements BoardDAO{
+	
+	public int getNum () throws Exception {
+		Connection con = DBConnector.getDBConnect();
+		
+		String sql =  "select board_seq.nextval from dual";
+		PreparedStatement st = con.prepareStatement(sql);
+		
+		ResultSet rs = st.executeQuery();
+		rs.next();
+		
+		int num = rs.getInt(1);
+		
+		DBConnector.disConnect(con, st, rs);
+		
+		return num;
+	}
 	
 	
 	@Override
@@ -24,13 +42,14 @@ public class NoticeDAO implements BoardDAO{
 		
 		con.setAutoCommit(false);
 		
-		String sql="insert into NOTICE values(board_seq.nextval,?,?,?,sysdate,0)";
+		String sql="insert into NOTICE values(?,?,?,?,sysdate,0)";
 		
 		PreparedStatement st = con.prepareStatement(sql);
 		
-		st.setString(1, boardDTO.getWriter());
-		st.setString(2, boardDTO.getTitle());
-		st.setString(3, boardDTO.getContents());
+		st.setInt(1, boardDTO.getNum());
+		st.setString(2, boardDTO.getWriter());
+		st.setString(3, boardDTO.getTitle());
+		st.setString(4, boardDTO.getContents());
 		
 		
 		int result = st.executeUpdate();
@@ -53,15 +72,14 @@ public class NoticeDAO implements BoardDAO{
 		
 		con.setAutoCommit(false);
 		
-		String sql = "update NOTICE set writer=?,title=?,contents=?,reg_date=? where num=?";
+		String sql = "update NOTICE set writer=?,title=?,contents=? where num=?";
 		
 		PreparedStatement st = con.prepareStatement(sql);
 		
 		st.setString(1, boardDTO.getWriter());
 		st.setString(2, boardDTO.getTitle());
 		st.setString(3, boardDTO.getContents());
-		st.setDate(4, boardDTO.getReg_date());
-		st.setInt(5, boardDTO.getNum());
+		st.setInt(4, boardDTO.getNum());
 		
 		int result = st.executeUpdate();
 		
